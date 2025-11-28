@@ -24,7 +24,6 @@ jobs:
       - name: Compute tag
         id: tag
         run: |
-          # Create a timestamp-based tag if none provided
           echo "tag=v$(date -u +%Y%m%d%H%M%S)" >> $GITHUB_OUTPUT
 
       - name: Create Release
