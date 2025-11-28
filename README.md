@@ -1,17 +1,6 @@
-# Archive of decoded items.dat
+# items.dat decoder by Yuhkil
 
-## Information
-
-The `items.dat` file format has evolved through various versions, with changes in data structure and additional fields being introduced over time. Below is a summary of the modifications made to the data structure for each version (till recent update as of now):
-
-# items.dat-decoder
-
-A small command-line tool and library for decoding Growtopia `items.dat` to `items.json`.
-
-**Features**
-- Parse `items.dat` across multiple historical versions.
-- Read and write (encode/decode) item definitions.
-- Defensive parsing with length checks to avoid crashes on malformed input.
+A small command-line tool and library for decoding Growtopia `items.dat` to JSON. Made in C99.
 
 **Prerequisites**
 - Windows: PowerShell and a supported toolchain (MSYS2/MinGW or Visual Studio) to build from source.
@@ -38,6 +27,55 @@ make
 ```
 .\itemsdat_decoder.exe --help
 ```
+
+**Version changes (might be wrong but still alligned)**
+### `version 11`
+- **New Field:** `punch_option`
+  - **Description:** A new string field named `punch_option` was introduced.
+
+### `version 12`
+- **Data Skipping:** 
+  - **Description:** An additional 13 bytes of data are skipped in this version.
+
+### `version 13`
+- **Data Skipping:** 
+  - **Description:** An additional 4 bytes of data are skipped in this version.
+
+### `version 14`
+- **Data Skipping:** 
+  - **Description:** An additional 4 bytes of data are skipped in this version.
+
+### `version 15`
+- **Data Handling:**
+  - **Description:** An additional 25 bytes of data are skipped, followed by reading a new string.
+
+### `version 16`
+- **Data Handling:**
+  - **Description:** A new string is read in this version.
+
+### `version 17`
+- **Data Skipping:**
+  - **Description:** An additional 4 bytes of data are skipped in this version.
+
+### `version 18`
+- **Data Skipping:**
+  - **Description:** An additional 4 bytes of data are skipped in this version.
+
+### `version 19`
+- **Data Handling:**
+  - **Description:** An additional 9 bytes of unknown data are read in this version.
+
+### `version 21`
+- **Data Handling:**
+  - **Description:** An additional 2 bytes of unknown data are read in this version.
+
+### `version 22`
+- **Data Handling:**
+  - **Description:** A new string field for item info is read in this version.
+
+### `version 23`
+- **Data Handling:**
+  - **Description:** Two additional 2-byte recipe values are read in this version.
 
 **License**
 - See `LICENSE` for license details.
