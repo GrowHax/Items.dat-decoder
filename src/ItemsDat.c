@@ -48,13 +48,11 @@ int itemsdat_get_write_size(ItemsDat* dat) {
 char* itemsdat_read_string(ItemsDat* dat, int encoded, int id) {
     int16_t len = extendbuffer_readI16(&dat->buffer);
     if (len < 0) len = 0;
-    // Clamp length to available bytes to avoid oversized allocations
     size_t remaining = 0;
     if (dat->buffer.size > dat->buffer.mempos) remaining = dat->buffer.size - dat->buffer.mempos;
     if ((size_t)len > remaining) len = (int16_t)remaining;
     char* s = (char*)malloc((size_t)len + 1);
     if (!s) {
-        // Allocation failed; return empty string instead of aborting
         char* empty = (char*)malloc(1);
         if (!empty) return NULL;
         empty[0] = '\0';
@@ -83,14 +81,12 @@ void itemsdat_decode(ItemsDat* dat) {
     dat->buffer.mempos = 0;
     int16_t version = extendbuffer_readI16(&dat->buffer);
     int32_t count = extendbuffer_readI32(&dat->buffer);
-    // Debug: print read header values to help diagnose issues
-    printf("itemsdat_decode: version=%d, itemCount=%d\n", version, count);
-    // Sanity-check itemCount to avoid huge/negative allocations from corrupted input
-    if (count < 0 || count > 1000000) {
+    fprintf(stderr, "itemsdat_decode: version=%d, itemCount=%d\n", version, count);
+    if (count == NULL) {
         fprintf(stderr, "Invalid itemCount (%d) - aborting decode\n", count);
         return;
     }
-    // Free previous meta (if any) and initialize new meta with the read count
+
     itemsdatmeta_free(&dat->meta);
     itemsdatmeta_init(&dat->meta, count);
     dat->meta.version = version;

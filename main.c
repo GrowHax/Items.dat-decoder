@@ -54,13 +54,12 @@ int main(int argc, char** argv) {
 
     itemsdat_decode(&items);
 
-    printf("After decode\n");
+    /* printf("After decode\n"); */
+    printf("https://github.com/GrowHax/items.dat-decoder\n");
     printf("Decoded items.dat\n");
     printf("Version: %d\n", items.meta.version);
     printf("Item count (meta): %d\n", items.meta.itemCount);
     printf("Items read: %d\n", items.meta.itemCount);
-
-    // Sort items by id
     qsort(items.meta.items, items.meta.itemCount, sizeof(ItemDefinition), compare_items);
 
     int wantJson = 0;
@@ -91,15 +90,38 @@ int main(int argc, char** argv) {
         if (jsonOutPath && strcmp(jsonOutPath, "-") != 0) {
             outf = fopen(jsonOutPath, "w");
             if (!outf) {
-                fprintf(stderr, "Failed to open JSON output: %s\n", jsonOutPath);
+                fprintf(stderr, "cry JSON output: %s\n", jsonOutPath);
                 itemsdat_free(&items);
                 return 2;
             }
         }
 
+        void print_json_string_field(FILE* outf, const char* key, const char* str) {
+            char escaped[1024];
+            escape_json_string(str ? str : "", escaped, sizeof(escaped));
+            fprintf(outf, "      \"%s\": \"%s\",\n", key, escaped);
+        }
+
+        void print_json_int_field(FILE* outf, const char* key, int value) {
+            fprintf(outf, "      \"%s\": %d,\n", key, value);
+        }
+
+        void print_json_uint_field(FILE* outf, const char* key, unsigned value) {
+            fprintf(outf, "      \"%s\": %u,\n", key, value);
+        }
+
+        void print_json_byte_array_field(FILE* outf, const char* key, const unsigned char* arr, size_t len) {
+            fprintf(outf, "      \"%s\": [", key);
+            for (size_t k = 0; k < len; k++) {
+                if (k) fprintf(outf, ", ");
+                fprintf(outf, "%u", arr[k]);
+            }
+            fprintf(outf, "],\n");
+        }
+
         fprintf(outf, "{\n");
         fprintf(outf, "  \"version\": %d,\n", items.meta.version);
-        fprintf(outf, "  \"itemCount\": %d,\n", items.meta.itemCount);
+        fprintf(outf, "  \"item_count\": %d,\n", items.meta.itemCount);
         fprintf(outf, "  \"items\": [\n");
         int firstItem = 1;
 
@@ -108,28 +130,76 @@ int main(int argc, char** argv) {
             firstItem = 0;
             ItemDefinition* it = &items.meta.items[i];
             fprintf(outf, "    {\n");
-            fprintf(outf, "      \"id\": %d,\n", it->id);
-
-            char escaped[1024];
-            escape_json_string(it->name ? it->name : "", escaped, sizeof(escaped));
-            fprintf(outf, "      \"name\": \"%s\",\n", escaped);
-
-            escape_json_string(it->texture ? it->texture : "", escaped, sizeof(escaped));
-            fprintf(outf, "      \"texture\": \"%s\",\n", escaped);
-
-            fprintf(outf, "      \"flags\": %u,\n", it->flags);
-            fprintf(outf, "      \"type\": %u,\n", (unsigned)it->type);
-            fprintf(outf, "      \"materialType\": %u\n", (unsigned)it->materialType);
+            print_json_int_field(outf, "id", it->id);
+            print_json_string_field(outf, "name", it->name);
+            print_json_string_field(outf, "texture", it->texture);
+            print_json_uint_field(outf, "flags", it->flags);
+            print_json_uint_field(outf, "type", (unsigned)it->type);
+            print_json_uint_field(outf, "material_type", (unsigned)it->materialType);
+            print_json_int_field(outf, "texture_hash", it->textureHash);
+            print_json_uint_field(outf, "visual_effect_type", (unsigned)it->visualEffectType);
+            print_json_int_field(outf, "cooking_time", it->cookingTime);
+            print_json_uint_field(outf, "texture_x", (unsigned)it->textureX);
+            print_json_uint_field(outf, "texture_y", (unsigned)it->textureY);
+            print_json_uint_field(outf, "storage_type", (unsigned)it->storageType);
+            print_json_uint_field(outf, "is_stripey_wallpaper", (unsigned)it->isStripeyWallpaper);
+            print_json_uint_field(outf, "collision_type", (unsigned)it->collisionType);
+            print_json_uint_field(outf, "break_hits", (unsigned)it->breakHits);
+            print_json_int_field(outf, "reset_state_after", it->resetStateAfter);
+            print_json_uint_field(outf, "body_part_type", (unsigned)it->bodyPartType);
+            print_json_int_field(outf, "rarity", it->rarity);
+            print_json_uint_field(outf, "max_amount", (unsigned)it->maxAmount);
+            print_json_string_field(outf, "extra_file", it->extraFile);
+            print_json_int_field(outf, "extra_file_hash", it->extraFileHash);
+            print_json_int_field(outf, "audio_volume", it->audioVolume);
+            print_json_string_field(outf, "pet_name", it->petName);
+            print_json_string_field(outf, "pet_prefix", it->petPrefix);
+            print_json_string_field(outf, "pet_suffix", it->petSuffix);
+            print_json_string_field(outf, "pet_ability", it->petAbility);
+            print_json_uint_field(outf, "seed_base", (unsigned)it->seedBase);
+            print_json_uint_field(outf, "seed_overlay", (unsigned)it->seedOverlay);
+            print_json_uint_field(outf, "tree_base", (unsigned)it->treeBase);
+            print_json_uint_field(outf, "tree_leaves", (unsigned)it->treeLeaves);
+            print_json_int_field(outf, "seed_color", it->seedColor);
+            print_json_int_field(outf, "seed_overlay_color", it->seedOverlayColor);
+            print_json_int_field(outf, "ingredient", it->ingredient);
+            print_json_int_field(outf, "grow_time", it->growTime);
+            print_json_int_field(outf, "fx_flags", it->fxFlags);
+            print_json_string_field(outf, "extra_options", it->extraOptions);
+            print_json_string_field(outf, "texture2", it->texture2);
+            print_json_string_field(outf, "extra_options2", it->extraOptions2);
+            print_json_int_field(outf, "unknown_int1", it->unknownInt1);
+            print_json_int_field(outf, "unknown_int2", it->unknownInt2);
+            print_json_int_field(outf, "flags2", it->flags2);
+            print_json_byte_array_field(outf, "extra_bytes", it->extraBytes, 60);
+            print_json_int_field(outf, "tile_range", it->tileRange);
+            print_json_int_field(outf, "vault_capacity", it->vaultCapacity);
+            print_json_string_field(outf, "punch_options", it->punchOptions);
+            print_json_int_field(outf, "flags3", it->flags3);
+            print_json_byte_array_field(outf, "body_part", it->bodyPart, 9);
+            print_json_int_field(outf, "light_range", it->lightRange);
+            print_json_int_field(outf, "unknown_int3", it->unknownInt3);
+            print_json_uint_field(outf, "can_sit", (unsigned)it->canSit);
+            print_json_int_field(outf, "player_offset_x", it->playerOffsetX);
+            print_json_int_field(outf, "player_offset_y", it->playerOffsetY);
+            print_json_int_field(outf, "chair_texture_x", it->chairTextureX);
+            print_json_int_field(outf, "chair_texture_y", it->chairTextureY);
+            print_json_int_field(outf, "chair_leg_offset_x", it->chairLegOffsetX);
+            print_json_int_field(outf, "chair_leg_offset_y", it->chairLegOffsetY);
+            print_json_string_field(outf, "chair_texture", it->chairTexture);
+            print_json_string_field(outf, "item_renderer", it->itemRenderer);
+            print_json_int_field(outf, "extra_flags1", it->extraFlags1);
+            print_json_int_field(outf, "item_renderer_hash", it->itemRendererHash);
+            print_json_byte_array_field(outf, "unknown_bytes2", it->unknownBytes2, 9);
+            print_json_int_field(outf, "unknown_short1", it->unknownShort1);
+            print_json_string_field(outf, "info", it->info);
+            fprintf(outf, "      \"recipe\": [%u, %u]\n", (unsigned)it->recipe[0], (unsigned)it->recipe[1]);
             fprintf(outf, "    }");
         }
         fprintf(outf, "\n  ]\n}\n");
 
         if (outf != stdout) fclose(outf);
         printf("Wrote JSON to %s\n", jsonOutPath ? jsonOutPath : "stdout");
-    } else {
-        itemsdat_encode(&items);
-        writeFile("items_out.dat", items.buffer.data, items.buffer.size);
-        printf("Wrote items_out.dat (round-trip) size=%zu\n", items.buffer.size);
     }
 
     itemsdat_free(&items);

@@ -17,18 +17,10 @@ echo Build succeeded.
 
 echo Running itemsdat_decoder.exe %ARGS%
 
-REM If no args, just run
 if "%ARGS%"=="" (
-	.\itemsdat_decoder.exe
+	.\itemsdat_decoder.exe --json-stdout > items.json
 	exit /b %ERRORLEVEL%
 )
 
-REM If exactly --json, run and let program choose default items.json
-if "%ARGS%"=="--json" (
-	.\itemsdat_decoder.exe --json
-	exit /b %ERRORLEVEL%
-)
-
-REM Otherwise forward all args (supports --json out.json etc.)
 .\itemsdat_decoder.exe %ARGS%
 exit /b %ERRORLEVEL%

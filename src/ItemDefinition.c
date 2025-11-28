@@ -41,7 +41,7 @@ void itemdefinition_free(ItemDefinition* item) {
 void itemsdatmeta_init(ItemsDatMeta* meta, int32_t count) {
     meta->items = (ItemDefinition*)malloc(count * sizeof(ItemDefinition));
     if (!meta->items) {
-        printf("malloc failed for items\n");
+        fprintf(stderr, "malloc failed for items\n");
         exit(1);
     }
     meta->itemCount = count;
