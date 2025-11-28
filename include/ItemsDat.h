@@ -1,22 +1,24 @@
-#pragma once
+#ifndef ITEMSDAT_H
+#define ITEMSDAT_H
+
 #include "ExtendBuffer.h"
 #include "ItemDefinition.h"
-#include <string>
-#include <vector>
+#include <stdint.h>
 
-class ItemsDat {
-public:
+typedef struct {
     ExtendBuffer buffer;
-    std::string key = "PBG892FXX982ABC*";
+    const char* key;
     ItemsDatMeta meta;
+} ItemsDat;
 
-    ItemsDat() = default;
-    ItemsDat(const std::vector<uint8_t>& data) : buffer(data) {}
-    ItemsDat(size_t size) : buffer(size) {}
+void itemsdat_init(ItemsDat* dat);
+void itemsdat_init_data(ItemsDat* dat, const uint8_t* data, size_t len);
+void itemsdat_free(ItemsDat* dat);
 
-    int getWriteSize();
-    std::string readString(bool encoded=false, int id=0);
-    void writeString(const std::string &s, int id=0, bool encoded=false);
-    void decode();
-    void encode();
-};
+int itemsdat_get_write_size(ItemsDat* dat);
+char* itemsdat_read_string(ItemsDat* dat, int encoded, int id);
+void itemsdat_write_string(ItemsDat* dat, const char* s, int id, int encoded);
+void itemsdat_decode(ItemsDat* dat);
+void itemsdat_encode(ItemsDat* dat);
+
+#endif
