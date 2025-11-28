@@ -1,98 +1,75 @@
-#ifndef ITEM_DEFINITION_H
-#define ITEM_DEFINITION_H
+#pragma once
+#include <cstdint>
+#include <string>
+#include <vector>
+#include <unordered_map>
 
-#include <stdint.h>
-#include <stdlib.h>
+struct ItemDefinition {
+    int32_t id = 0;
+    uint16_t flags = 0;
+    uint8_t type = 0;
+    uint8_t materialType = 0;
 
-typedef struct {
-    int32_t id;
-    uint16_t flags;
-    uint8_t type;
-    uint8_t materialType;
+    std::string name;
+    std::string texture;
+    int32_t textureHash = 0;
+    uint8_t visualEffectType = 0;
+    int32_t cookingTime = 0;
 
-    char* name;
-    char* texture;
-    int32_t textureHash;
-    uint8_t visualEffectType;
-    int32_t cookingTime;
+    uint8_t textureX = 0;
+    uint8_t textureY = 0;
+    uint8_t storageType = 0;
+    uint8_t isStripeyWallpaper = 0;
+    uint8_t collisionType = 0;
+    uint8_t breakHits = 0;
 
-    uint8_t textureX;
-    uint8_t textureY;
-    uint8_t storageType;
-    uint8_t isStripeyWallpaper;
-    uint8_t collisionType;
-    uint8_t breakHits;
+    int32_t resetStateAfter = 0;
+    uint8_t bodyPartType = 0;
+    int16_t rarity = 0;
+    uint8_t maxAmount = 0;
 
-    int32_t resetStateAfter;
-    uint8_t bodyPartType;
-    int16_t rarity;
-    uint8_t maxAmount;
+    std::string extraFile;
+    int32_t extraFileHash = 0;
+    int32_t audioVolume = 0;
 
-    char* extraFile;
-    int32_t extraFileHash;
-    int32_t audioVolume;
+    std::string petName, petPrefix, petSuffix, petAbility;
 
-    char* petName;
-    char* petPrefix;
-    char* petSuffix;
-    char* petAbility;
+    uint8_t seedBase = 0, seedOverlay = 0, treeBase = 0, treeLeaves = 0;
+    int32_t seedColor = 0, seedOverlayColor = 0, ingredient = 0, growTime = 0;
 
-    uint8_t seedBase;
-    uint8_t seedOverlay;
-    uint8_t treeBase;
-    uint8_t treeLeaves;
-    int32_t seedColor;
-    int32_t seedOverlayColor;
-    int32_t ingredient;
-    int32_t growTime;
+    int32_t fxFlags = 0;
 
-    int32_t fxFlags;
+    std::string extraOptions, texture2, extraOptions2;
 
-    char* extraOptions;
-    char* texture2;
-    char* extraOptions2;
+    int32_t unknownInt1 = 0, unknownInt2 = 0, flags2 = 0;
 
-    int32_t unknownInt1;
-    int32_t unknownInt2;
-    int32_t flags2;
+    std::vector<uint8_t> extraBytes; // 60 bytes
 
-    uint8_t extraBytes[60];
-
-    int32_t tileRange;
-    int32_t vaultCapacity;
+    int32_t tileRange = 0;
+    int32_t vaultCapacity = 0;
 
     // version >= 11
-    char* punchOptions;
-    int32_t flags3;
-    uint8_t bodyPart[9];
-    int32_t lightRange;
-    int32_t unknownInt3;
-    uint8_t canSit;
-    int32_t playerOffsetX;
-    int32_t playerOffsetY;
-    int32_t chairTextureX;
-    int32_t chairTextureY;
-    int32_t chairLegOffsetX;
-    int32_t chairLegOffsetY;
-    char* chairTexture;
-    char* itemRenderer;
-    int32_t extraFlags1;
-    int32_t itemRendererHash;
-    uint8_t unknownBytes2[9];
-    int16_t unknownShort1;
-    char* info;
-    uint16_t recipe[2];
-} ItemDefinition;
+    std::string punchOptions;
+    int32_t flags3 = 0;
+    std::vector<uint8_t> bodyPart; // 9 bytes
+    int32_t lightRange = 0;
+    int32_t unknownInt3 = 0;
+    uint8_t canSit = 0;
+    int32_t playerOffsetX = 0, playerOffsetY = 0;
+    int32_t chairTextureX = 0, chairTextureY = 0;
+    int32_t chairLegOffsetX = 0, chairLegOffsetY = 0;
+    std::string chairTexture;
+    std::string itemRenderer;
+    int32_t extraFlags1 = 0;
+    int32_t itemRendererHash = 0;
+    std::vector<uint8_t> unknownBytes2; // 9 bytes
+    int16_t unknownShort1 = 0;
+    std::string info;
+    std::vector<uint16_t> recipe; // 2 entries
+};
 
-typedef struct {
-    ItemDefinition* items;
-    int32_t itemCount;
-    int16_t version;
-} ItemsDatMeta;
-
-void itemdefinition_init(ItemDefinition* item);
-void itemdefinition_free(ItemDefinition* item);
-void itemsdatmeta_init(ItemsDatMeta* meta, int32_t count);
-void itemsdatmeta_free(ItemsDatMeta* meta);
-
-#endif
+struct ItemsDatMeta {
+    std::unordered_map<int32_t, ItemDefinition> items;
+    int32_t itemCount = 0;
+    int16_t version = 0;
+};
