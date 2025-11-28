@@ -1,0 +1,58 @@
+name: Build and Run
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes build-essential make
+
+      - name: Build
+        run: make
+
+      - name: Run binary
+        run: ./itemsdat_decoder --json-stdout || true
+
+      - name: Upload built binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: itemsdat-linux
+          path: itemsdat_decoder
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up MSYS2 (for GCC/make)
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: base-devel mingw-w64-x86_64-gcc mingw-w64-x86_64-make
+
+      - name: Build (MSYS2)
+        shell: bash -l {0}
+        run: |
+          make
+
+      - name: Run binary (MSYS2)
+        shell: bash -l {0}
+        run: |
+          ./itemsdat_decoder.exe --json-stdout || true
+
+      - name: Upload built binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: itemsdat-windows
+          path: itemsdat_decoder.exe
