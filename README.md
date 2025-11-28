@@ -1,6 +1,8 @@
 # items.dat decoder by Yuhkil
 
 A small command-line tool and library for decoding Growtopia `items.dat` to JSON. Made in C99.
+You can open a ticket in `Issues` if any problems occur. 
+(bugs may occur since this is a completely refactored old project / syntax might be different)
 
 **Prerequisites**
 - Windows: PowerShell and a supported toolchain (MSYS2/MinGW or Visual Studio) to build from source.
