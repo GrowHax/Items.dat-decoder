@@ -1,57 +1,35 @@
-#pragma once
-#include <cstdint>
-#include <vector>
-#include <stdexcept>
+#ifndef EXTEND_BUFFER_H
+#define EXTEND_BUFFER_H
 
-struct ExtendBuffer {
-    std::vector<uint8_t> data;
-    size_t mempos = 0;
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
-    ExtendBuffer() = default;
-    ExtendBuffer(size_t size) : data(size), mempos(0) {}
-    ExtendBuffer(const std::vector<uint8_t>& d) : data(d), mempos(0) {}
+typedef struct {
+    uint8_t* data;
+    size_t size;
+    size_t capacity;
+    size_t mempos;
+} ExtendBuffer;
 
-    uint8_t readU8() {
-        if (mempos >= data.size()) throw std::out_of_range("readU8 out of range");
-        return data[mempos++];
-    }
-    int8_t readI8() { return static_cast<int8_t>(readU8()); }
+void extendbuffer_init(ExtendBuffer* buf);
+void extendbuffer_init_size(ExtendBuffer* buf, size_t size);
+void extendbuffer_init_data(ExtendBuffer* buf, const uint8_t* d, size_t len);
+void extendbuffer_free(ExtendBuffer* buf);
+void extendbuffer_resize(ExtendBuffer* buf, size_t new_size);
 
-    uint16_t readU16() {
-        if (mempos + 1 >= data.size()) throw std::out_of_range("readU16 out of range");
-        uint16_t v = data[mempos] | (data[mempos+1] << 8);
-        mempos += 2;
-        return v;
-    }
-    int16_t readI16() { return static_cast<int16_t>(readU16()); }
+uint8_t extendbuffer_readU8(ExtendBuffer* buf);
+int8_t extendbuffer_readI8(ExtendBuffer* buf);
+uint16_t extendbuffer_readU16(ExtendBuffer* buf);
+int16_t extendbuffer_readI16(ExtendBuffer* buf);
+uint32_t extendbuffer_readU32(ExtendBuffer* buf);
+int32_t extendbuffer_readI32(ExtendBuffer* buf);
 
-    uint32_t readU32() {
-        if (mempos + 3 >= data.size()) throw std::out_of_range("readU32 out of range");
-        uint32_t v = data[mempos] | (data[mempos+1] << 8) | (data[mempos+2] << 16) | (data[mempos+3] << 24);
-        mempos += 4;
-        return v;
-    }
-    int32_t readI32() { return static_cast<int32_t>(readU32()); }
+void extendbuffer_writeU8(ExtendBuffer* buf, uint8_t v);
+void extendbuffer_writeI8(ExtendBuffer* buf, int8_t v);
+void extendbuffer_writeU16(ExtendBuffer* buf, uint16_t v);
+void extendbuffer_writeI16(ExtendBuffer* buf, int16_t v);
+void extendbuffer_writeU32(ExtendBuffer* buf, uint32_t v);
+void extendbuffer_writeI32(ExtendBuffer* buf, int32_t v);
 
-    void writeU8(uint8_t v) {
-        if (mempos >= data.size()) data.resize(mempos+1);
-        data[mempos++] = v;
-    }
-    void writeI8(int8_t v) { writeU8(static_cast<uint8_t>(v)); }
-
-    void writeU16(uint16_t v) {
-        if (mempos + 1 >= data.size()) data.resize(mempos+2);
-        data[mempos++] = v & 0xFF;
-        data[mempos++] = (v >> 8) & 0xFF;
-    }
-    void writeI16(int16_t v) { writeU16(static_cast<uint16_t>(v)); }
-
-    void writeU32(uint32_t v) {
-        if (mempos + 3 >= data.size()) data.resize(mempos+4);
-        data[mempos++] = v & 0xFF;
-        data[mempos++] = (v >> 8) & 0xFF;
-        data[mempos++] = (v >> 16) & 0xFF;
-        data[mempos++] = (v >> 24) & 0xFF;
-    }
-    void writeI32(int32_t v) { writeU32(static_cast<uint32_t>(v)); }
-};
+#endif

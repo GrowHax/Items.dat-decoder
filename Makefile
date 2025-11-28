@@ -6,10 +6,10 @@ OBJ = main.o src/ExtendBuffer.o src/file_io.o src/ItemDefinition.o src/ItemsDat.
 all: itemsdat_decoder
 
 itemsdat_decoder: $(OBJ)
-	$(CC) $(OBJ) -o itemsdat_decoder
+$(CC) $(OBJ) -o itemsdat_decoder
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ) itemsdat_decoder
+rm -f $(OBJ) itemsdat_decoder
