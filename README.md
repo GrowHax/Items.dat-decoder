@@ -39,17 +39,5 @@ make
 .\itemsdat_decoder.exe --help
 ```
 
-**Repository layout**
-- `include/` — public headers
-- `src/` — implementation files
-- `Makefile`, `build.bat`, `build_and_run.bat` — build helpers
-
-**Notes**
-- The code supports many optional fields and version-gated branches; removing support for older versions will reduce code size but will break compatibility with older `items.dat` files.
-- Do not check compiled artifacts (binaries, object files) into the repository.
-
-**Contributing**
-- PRs welcome. Run the build and include tests where appropriate.
-
 **License**
 - See `LICENSE` for license details.
