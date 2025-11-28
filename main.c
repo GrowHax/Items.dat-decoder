@@ -27,6 +27,29 @@ void escape_json_string(const char* input, char* output, size_t output_size) {
     output[j] = 0;
 }
 
+void print_json_string_field(FILE* outf, const char* key, const char* str) {
+    char escaped[1024];
+    escape_json_string(str ? str : "", escaped, sizeof(escaped));
+    fprintf(outf, "      \"%s\": \"%s\",\n", key, escaped);
+}
+
+void print_json_int_field(FILE* outf, const char* key, int value) {
+    fprintf(outf, "      \"%s\": %d,\n", key, value);
+}
+
+void print_json_uint_field(FILE* outf, const char* key, unsigned value) {
+    fprintf(outf, "      \"%s\": %u,\n", key, value);
+}
+
+void print_json_byte_array_field(FILE* outf, const char* key, const unsigned char* arr, size_t len) {
+    fprintf(outf, "      \"%s\": [", key);
+    for (size_t k = 0; k < len; k++) {
+        if (k) fprintf(outf, ", ");
+        fprintf(outf, "%u", arr[k]);
+    }
+    fprintf(outf, "],\n");
+}
+
 int main(int argc, char** argv) {
     ItemsDat items;
     itemsdat_init(&items);
@@ -94,29 +117,6 @@ int main(int argc, char** argv) {
                 itemsdat_free(&items);
                 return 2;
             }
-        }
-
-        void print_json_string_field(FILE* outf, const char* key, const char* str) {
-            char escaped[1024];
-            escape_json_string(str ? str : "", escaped, sizeof(escaped));
-            fprintf(outf, "      \"%s\": \"%s\",\n", key, escaped);
-        }
-
-        void print_json_int_field(FILE* outf, const char* key, int value) {
-            fprintf(outf, "      \"%s\": %d,\n", key, value);
-        }
-
-        void print_json_uint_field(FILE* outf, const char* key, unsigned value) {
-            fprintf(outf, "      \"%s\": %u,\n", key, value);
-        }
-
-        void print_json_byte_array_field(FILE* outf, const char* key, const unsigned char* arr, size_t len) {
-            fprintf(outf, "      \"%s\": [", key);
-            for (size_t k = 0; k < len; k++) {
-                if (k) fprintf(outf, ", ");
-                fprintf(outf, "%u", arr[k]);
-            }
-            fprintf(outf, "],\n");
         }
 
         fprintf(outf, "{\n");

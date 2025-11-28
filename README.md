@@ -2,11 +2,11 @@
 
 ## Information
 
-The `items.dat` file format has evolved through various versions, with changes in data structure and additional fields being introduced over time. Below is a summary of the modifications made to the data structure for each version:
+The `items.dat` file format has evolved through various versions, with changes in data structure and additional fields being introduced over time. Below is a summary of the modifications made to the data structure for each version (till recent update as of now):
 
 # items.dat-decoder
 
-A small command-line tool and library for decoding Growtopia `items.dat` files into JSON and for working with the items schema.
+A small command-line tool and library for decoding Growtopia `items.dat` to `items.json`.
 
 **Features**
 - Parse `items.dat` across multiple historical versions.
