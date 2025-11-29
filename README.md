@@ -5,7 +5,7 @@ You can open a ticket in `Issues` if any problems occur.
 (bugs may occur since this is a completely refactored old project / syntax might be different)
 
 **REQUIRED**
-- Place the compatible `items.dat‘ that you want to decode within the root folder.
+- Place the compatible `items.dat` that you want to decode within the root folder.
 
 **Prerequisites**
 - Windows: PowerShell and a supported toolchain (MSYS2/MinGW or Visual Studio) to build from source.
