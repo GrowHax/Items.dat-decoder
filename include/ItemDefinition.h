@@ -82,6 +82,7 @@ typedef struct {
     int16_t unknownShort1;
     char* info;
     uint16_t recipe[2];
+    uint8_t unknownBytes3;
 } ItemDefinition;
 
 typedef struct {

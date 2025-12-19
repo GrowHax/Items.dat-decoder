@@ -183,6 +183,7 @@ void itemsdat_decode(ItemsDat* dat) {
                 item->recipe[0] = extendbuffer_readU16(&dat->buffer);
                 item->recipe[1] = extendbuffer_readU16(&dat->buffer);
             }
+            if (dat->meta.version >= 24) item->unknownBytes3 = extendbuffer_readU8(&dat->buffer);
         }
     }
 }
