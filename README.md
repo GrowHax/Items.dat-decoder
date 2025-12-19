@@ -33,54 +33,57 @@ make
 .\itemsdat_decoder.exe --help
 ```
 
-**Version changes (might be wrong but still alligned)**
+**Version changes**
 ### `version 11`
-- **New Field:** `punch_option`
-  - **Description:** A new string field named `punch_option` was introduced.
+- **New Field:** `punchOptions` (string)
 
 ### `version 12`
-- **Data Skipping:** 
-  - **Description:** An additional 13 bytes of data are skipped in this version.
+- **New Fields:**
+  - `flags3` (int32_t)
+  - `bodyPart[9]` (uint8_t array)
 
 ### `version 13`
-- **Data Skipping:** 
-  - **Description:** An additional 4 bytes of data are skipped in this version.
+- **New Field:** `lightRange` (int32_t)
 
 ### `version 14`
-- **Data Skipping:** 
-  - **Description:** An additional 4 bytes of data are skipped in this version.
+- **New Field:** `unknownInt3` (int32_t)
 
 ### `version 15`
-- **Data Handling:**
-  - **Description:** An additional 25 bytes of data are skipped, followed by reading a new string.
+- **New Fields:** Chair/player functionality?
+  - `canSit` (uint8_t)
+  - `playerOffsetX` (int32_t)
+  - `playerOffsetY` (int32_t)
+  - `chairTextureX` (int32_t)
+  - `chairTextureY` (int32_t)
+  - `chairLegOffsetX` (int32_t)
+  - `chairLegOffsetY` (int32_t)
+  - `chairTexture` (string)
 
 ### `version 16`
-- **Data Handling:**
-  - **Description:** A new string is read in this version.
+- **New Field:** `itemRenderer` (string)
 
 ### `version 17`
-- **Data Skipping:**
-  - **Description:** An additional 4 bytes of data are skipped in this version.
+- **New Field:** `extraFlags1` (int32_t)
 
 ### `version 18`
-- **Data Skipping:**
-  - **Description:** An additional 4 bytes of data are skipped in this version.
+- **New Field:** `itemRendererHash` (int32_t)
 
 ### `version 19`
-- **Data Handling:**
-  - **Description:** An additional 9 bytes of unknown data are read in this version.
+- **New Field:** `unknownBytes2[9]` (uint8_t array)
 
 ### `version 21`
-- **Data Handling:**
-  - **Description:** An additional 2 bytes of unknown data are read in this version.
+- **New Field:** `unknownShort1` (int16_t)
 
 ### `version 22`
-- **Data Handling:**
-  - **Description:** A new string field for item info is read in this version.
+- **New Field:** `info` (string)
 
 ### `version 23`
-- **Data Handling:**
-  - **Description:** Two additional 2-byte recipe values are read in this version.
+- **New Fields:** Recipe system
+  - `recipe[0]` (uint16_t)
+  - `recipe[1]` (uint16_t)
+
+### `version 24`
+- **New Field:** `unknownBytes3` (uint8_t)
 
 **License**
 - See `LICENSE` for license details.
