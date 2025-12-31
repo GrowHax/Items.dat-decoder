@@ -4,6 +4,8 @@ A small command-line tool and library for decoding Growtopia `items.dat` to JSON
 You can open a ticket in `Issues` if any problems occur. 
 (bugs may occur since this is a completely refactored old project / syntax might be different)
 
+You can either snatch the **pre-compiled items.dat decoder** from here [Releases](https://github.com/GrowHax/Items.dat-decoder/releases), or continue reading.
+
 **REQUIRED**
 - Place the compatible `items.dat` that you want to decode within the root folder.
 
